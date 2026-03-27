@@ -82,6 +82,7 @@ RUN pnpm install && pnpm build
 
 # 2. Use clientshell as the runtime
 FROM clientshell
+# Copy files into the default clientshell root (/app/dist)
 COPY --from=builder /app/dist /app/dist
 ```
 
@@ -89,10 +90,22 @@ Build and run with environment variables:
 
 ```bash
 docker build -t my-app .
-docker run -p 8080:8080 -e CLIENT_API_URL=https://api.example.com my-app
+
+# Run with custom port and API URL
+docker run -p 9000:9000 \
+  -e CLIENTSHELL_PORT=9000 \
+  -e CLIENT_API_URL=https://api.example.com \
+  my-app
 ```
 
-The `clientshell` image handles reading the manifest, injecting variables into `env-config.js`, and serving your SPA via Caddy.
+### Configuration Variables
+
+| Variable | Default | Description |
+| :--- | :--- | :--- |
+| `CLIENTSHELL_PORT` | `8080` | The port Caddy listens on. |
+| `CLIENTSHELL_ROOT` | `/app/dist` | The root directory Caddy serves files from. |
+| `CLIENTSHELL_MANIFEST` | `/app/dist/clientshell.manifest.json` | Path to the manifest for the injector. |
+| `CLIENTSHELL_DEBUG` | `0` | Set to `1` for verbose log output. |
 
 ---
 

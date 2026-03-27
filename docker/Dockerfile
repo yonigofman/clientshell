@@ -25,16 +25,17 @@ COPY docker/Caddyfile /etc/caddy/Caddyfile
 COPY docker/entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
 
-# App static files will be mounted/copied to /app/dist
-WORKDIR /app/dist
-
 # Default env vars
+ENV CLIENTSHELL_PORT=8080
+ENV CLIENTSHELL_ROOT=/app/dist
 ENV CLIENTSHELL_MANIFEST=/app/dist/clientshell.manifest.json
 ENV CLIENTSHELL_DIR=/app/dist
 
-EXPOSE 8080
+WORKDIR ${CLIENTSHELL_ROOT}
+
+EXPOSE ${CLIENTSHELL_PORT}
 
 HEALTHCHECK --interval=30s --timeout=3s --start-period=5s \
-  CMD wget -qO- http://localhost:8080/health || exit 1
+  CMD wget -qO- http://localhost:${CLIENTSHELL_PORT}/health || exit 1
 
 ENTRYPOINT ["/entrypoint.sh"]
