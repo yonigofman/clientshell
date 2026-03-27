@@ -13,6 +13,9 @@
   },
   "main": "./dist/index.cjs",
   "types": "./dist/index.d.ts",
+  "publishConfig": {
+    "access": "public"
+  },
   "files": ["dist"],
   "scripts": {
     "build": "tsup",

@@ -102,6 +102,28 @@ pnpm build
 pnpm dev --filter example-vite-basic
 ```
 
+## Publishing to npm with GitHub OIDC
+
+Package publishing runs through [`.github/workflows/release.yml`](./.github/workflows/release.yml). It uses Changesets on `main`, requests `id-token: write`, and publishes with npm trusted publishing instead of an `NPM_TOKEN`.
+
+One-time npm setup:
+
+1. Add a trusted publisher for each public package on npm:
+   `@clientshell/core`, `@clientshell/cli`, `@clientshell/vite`, `@clientshell/webpack`, `@clientshell/rollup`, `@clientshell/zod`.
+2. Point each package at this GitHub repository and the workflow file `release.yml`.
+3. Remove old write-capable npm automation tokens after trusted publishing is confirmed.
+
+Release flow:
+
+1. Add a changeset with `pnpm dlx @changesets/cli add`.
+2. Merge the generated release PR from Changesets.
+3. The `Release` workflow publishes from GitHub-hosted runners using OIDC. No `NPM_TOKEN` secret is required.
+
+Notes:
+
+- npm trusted publishing currently requires a recent Node/npm runtime in CI, so the release workflow runs on Node 24.
+- Provenance is generated automatically by npm for public packages published from a public repository via trusted publishing.
+
 ## Production & Docker
 
 To use `clientshell` in production, you can use the `clientshell` image as a base for your own application in a multi-stage Dockerfile.
