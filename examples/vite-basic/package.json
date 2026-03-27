@@ -1,0 +1,16 @@
+{
+  "name": "example-vite-basic",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "devDependencies": {
+    "@clientshell/core": "workspace:*",
+    "@clientshell/vite": "workspace:*",
+    "typescript": "catalog:",
+    "vite": "^6.0.0"
+  }
+}

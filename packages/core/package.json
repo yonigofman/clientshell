@@ -1,0 +1,26 @@
+{
+  "name": "@clientshell/core",
+  "version": "0.1.0",
+  "type": "module",
+  "description": "Typed public runtime config for frontend apps — core package",
+  "license": "MIT",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "files": ["dist"],
+  "scripts": {
+    "build": "tsup",
+    "test": "vitest run",
+    "dev": "tsup --watch"
+  },
+  "devDependencies": {
+    "typescript": "catalog:",
+    "tsup": "catalog:",
+    "vitest": "catalog:"
+  }
+}

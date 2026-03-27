@@ -1,0 +1,23 @@
+{
+	auto_https off
+}
+
+:8080 {
+	root * /app/dist
+
+	# No-cache headers for env-config.js (regenerated at startup)
+	@envconfig path /env-config.js
+	header @envconfig Cache-Control "no-store, no-cache, must-revalidate"
+	header @envconfig Pragma "no-cache"
+
+	# Health check endpoint
+	respond /health 200 {
+		body "ok"
+	}
+
+	# Serve static files
+	file_server
+
+	# SPA fallback — serve index.html for all unmatched routes
+	try_files {path} /index.html
+}

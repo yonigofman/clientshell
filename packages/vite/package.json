@@ -1,0 +1,31 @@
+{
+  "name": "@clientshell/vite",
+  "version": "0.1.0",
+  "type": "module",
+  "description": "Vite plugin for clientshell — automatic manifest output and dev stub",
+  "license": "MIT",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "files": ["dist"],
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch"
+  },
+  "dependencies": {
+    "@clientshell/core": "workspace:*"
+  },
+  "peerDependencies": {
+    "vite": "^5.0.0 || ^6.0.0"
+  },
+  "devDependencies": {
+    "typescript": "catalog:",
+    "tsup": "catalog:",
+    "vite": "^6.0.0"
+  }
+}
