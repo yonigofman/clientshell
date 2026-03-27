@@ -22,7 +22,9 @@
     "dev": "tsup --watch"
   },
   "dependencies": {
-    "@clientshell/core": "workspace:*"
+    "@clientshell/core": "workspace:*",
+    "@clack/prompts": "^0.9.0",
+    "picocolors": "^1.1.0"
   },
   "devDependencies": {
     "@types/node": "^22.0.0",
