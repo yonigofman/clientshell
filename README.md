@@ -1,8 +1,19 @@
+<p align="center">
+  <img src="./apps/docs/public/logo.png" width="140" alt="clientshell logo" />
+</p>
+
 # clientshell
+
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
+[![pnpm](https://img.shields.io/badge/pnpm-v10-blue)](https://pnpm.io/)
+[![Docs](https://img.shields.io/badge/docs-fumadocs-indigo)](https://yonigofman.github.io/clientshell/)
 
 Inject public runtime config into compiled frontend apps at container startup—no rebuilding for each environment.
 
 `clientshell` provides a typed browser API for configuration and an ultra-fast Go injector that bridges the gap between static builds (Vite, Webpack) and dynamic environment variables.
+
+### 📚 [Read the Documentation](https://yonigofman.github.io/clientshell/)
+
 
 ## Why clientshell?
 

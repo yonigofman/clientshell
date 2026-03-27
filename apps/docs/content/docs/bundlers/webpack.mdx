@@ -56,3 +56,25 @@ module.exports = {
 
 - **Build (`mode: "production"`)**: Copies `clientshell.manifest.json` into your Webpack output directory (e.g., `dist/`).
 - **Dev (`mode: "development"`)**: Writes a stub `env-config.js` to the output directory using the defaults in your manifest, overlaid with your provided `devValues`.
+
+## Docker Deployment
+
+When deploying a Webpack app, ensure your `Dockerfile` runs the `manifest` step before or as part of the `build`. 
+
+```dockerfile
+# 1. Build Layer
+FROM node:20-alpine AS builder
+WORKDIR /app
+COPY . .
+
+# Ensure pnpm is installed and run pnpm build 
+# (which should be "pnpm manifest && webpack")
+RUN npm install -g pnpm && pnpm install && pnpm build
+
+# 2. Production Layer
+FROM clientshell
+COPY --from=builder /app/dist /app/dist
+```
+
+The Go injector will look for `/app/dist/clientshell.manifest.json` inside the container at startup.
+
