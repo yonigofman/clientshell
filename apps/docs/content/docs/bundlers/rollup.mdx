@@ -1,0 +1,49 @@
+---
+title: Rollup Plugin
+description: Using Clientshell with Rollup.
+---
+
+## Installation
+
+```bash
+pnpm add -D @clientshell/rollup @clientshell/cli
+```
+
+## The Rollup Flow
+
+Because `rollup.config.mjs` usually runs in plain Node.js via the CLI, we don't import the `.ts` schema file directly into the plugin configuration. Instead, we use the `clientshell` CLI to compile the schema into a JSON manifest first.
+
+## 1. Update Scripts
+
+Use `pnpm manifest` to generate the JSON file before building with Rollup, using `node --import tsx` to enable TypeScript support.
+
+```json
+{
+  "scripts": {
+    "manifest": "node --import tsx ./node_modules/@clientshell/cli/bin/clientshell.js manifest --schema src/env.schema.ts --output clientshell.manifest.json",
+    "build": "pnpm manifest && rollup -c rollup.config.mjs"
+  }
+}
+```
+
+## 2. Setup Config
+
+Point the plugin directly to the generated manifest!
+
+```javascript
+// rollup.config.mjs
+import { clientshellPlugin } from "@clientshell/rollup";
+
+export default {
+  // ... other config ...
+  plugins: [
+    clientshellPlugin({
+      manifestPath: "./clientshell.manifest.json",
+    }),
+  ],
+};
+```
+
+## What it does
+
+- Copies the parsed `clientshell.manifest.json` into your Rollup destination output directory (e.g. `dist/clientshell.manifest.json`) via the `writeBundle` hook at the end of the build.

@@ -1,0 +1,11 @@
+{
+  "title": "Documentation",
+  "pages": [
+    "index",
+    "core-concepts",
+    "bundlers",
+    "plugins",
+    "docker",
+    "cli"
+  ]
+}

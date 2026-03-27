@@ -1,0 +1,36 @@
+---
+title: CLI
+description: Powerful tooling for automation
+---
+
+The `@clientshell/cli` package provides interactive and scriptable capabilities to extract your TS schema into JSON, and instantly validate variables!
+
+## Installation
+
+```bash
+pnpm add -D @clientshell/cli
+```
+
+## `clientshell` Check Commands
+
+### 1. `manifest`
+Generate manifest JSON directly from your TypeScript schema without relying on Webpack config.
+
+```bash
+node --import tsx ./node_modules/@clientshell/cli/bin/clientshell.js manifest --schema src/env.schema.ts --output clientshell.manifest.json
+```
+_Note: We use `node --import tsx` to enable `tsx` ESM module loading explicitly because `.ts` files cannot natively be interpreted by Node.js CLIs._
+
+### 2. `validate`
+Securely validate missing configurations during CI/CD checks or inside a deployment container.
+
+```bash
+CLIENT_API_URL="xyz" node ./node_modules/@clientshell/cli/bin/clientshell.js validate --manifest clientshell.manifest.json
+```
+
+### 3. `stub`
+Generate a static `env-config.js` with stubbed default constants for testing directly.
+
+```bash
+node ./node_modules/@clientshell/cli/bin/clientshell.js stub --manifest dist/clientshell.manifest.json --output public/env-config.js
+```

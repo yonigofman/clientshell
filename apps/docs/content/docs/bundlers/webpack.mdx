@@ -1,0 +1,58 @@
+---
+title: Webpack Plugin
+description: Using Clientshell with Webpack.
+---
+
+## Installation
+
+```bash
+pnpm add -D @clientshell/webpack @clientshell/cli
+```
+
+## The Webpack Flow
+
+Because Webpack config (`webpack.config.cjs`) usually runs in pure Node.js (CommonJS), we shouldn't attempt to `require` the TypeScript (`.ts`) schema file directly inside the Webpack config. 
+
+Instead, we use the `clientshell` CLI to compile the schema into a JSON manifest first, before Webpack runs.
+
+## 1. Update Scripts
+
+Update your `package.json` to generate the JSON file using the CLI (`--import tsx` ensures Node.js can interpret `.ts` correctly).
+
+```json
+{
+  "scripts": {
+    "manifest": "node --import tsx ./node_modules/@clientshell/cli/bin/clientshell.js manifest --schema src/env.schema.ts --output clientshell.manifest.json",
+    "build": "pnpm manifest && webpack --config webpack.config.cjs",
+    "dev": "pnpm manifest && webpack serve --config webpack.config.cjs"
+  }
+}
+```
+
+## 2. Setup Webpack
+
+Point the Webpack plugin directly to your pre-generated manifest JSON file!
+
+```javascript
+// webpack.config.cjs
+const { ClientshellWebpackPlugin } = require("@clientshell/webpack");
+
+module.exports = {
+  // ... other config ...
+  plugins: [
+    new ClientshellWebpackPlugin({
+      manifestPath: "./clientshell.manifest.json",
+      
+      // Values to return in Development stubs
+      devValues: {
+        API_URL: "http://localhost:3000",
+      },
+    }),
+  ],
+};
+```
+
+## What it does
+
+- **Build (`mode: "production"`)**: Copies `clientshell.manifest.json` into your Webpack output directory (e.g., `dist/`).
+- **Dev (`mode: "development"`)**: Writes a stub `env-config.js` to the output directory using the defaults in your manifest, overlaid with your provided `devValues`.

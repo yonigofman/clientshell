@@ -3,7 +3,13 @@ node_modules
 
 # Build output
 dist
+.next
+out
 *.tsbuildinfo
+
+# clientshell artifacts (regenerated on build)
+clientshell.manifest.json
+env-config.js
 
 # Environment
 .env

@@ -1,0 +1,48 @@
+---
+title: Docker Injector
+description: Deploying your app in production with Go.
+---
+
+## Production & Docker
+
+To use `clientshell` in production, you use the ultra-fast Go `injector` binary. Running as a base Docker image, it intercepts requests for `/env-config.js` and securely transforms OS environment variables into an injected Javascript manifest.
+
+### Custom Dockerfile Example
+
+You can use the lightweight Alpine `clientshell` image as a base for your own application in a multi-stage Dockerfile.
+
+```dockerfile
+# 1. Build your app (Vite, Webpack, etc.)
+FROM node:20-alpine AS builder
+WORKDIR /app
+COPY . .
+RUN pnpm install && pnpm build
+
+# 2. Use clientshell as the production webserver / runtime
+FROM clientshell
+# Copy the dist/ output (including clientshell.manifest.json) into the clientshell root (/app/dist)
+COPY --from=builder /app/dist /app/dist
+```
+
+### Running the Container
+
+Provide your environment variables normally.
+
+```bash
+docker build -t my-app .
+
+# Run with custom port and API URL
+docker run -p 9000:9000 \
+  -e CLIENTSHELL_PORT=9000 \
+  -e CLIENT_API_URL=https://api.example.com \
+  my-app
+```
+
+### Configuration Variables
+
+| Variable | Default | Description |
+| :--- | :--- | :--- |
+| `CLIENTSHELL_PORT` | `8080` | The port the internal caddy wrapper listens on. |
+| `CLIENTSHELL_ROOT` | `/app/dist` | The root directory Caddy serves files from. |
+| `CLIENTSHELL_MANIFEST` | `/app/dist/clientshell.manifest.json` | Path to the manifest for the injector. |
+| `CLIENTSHELL_DEBUG` | `0` | Set to `1` for verbose injector log output. |

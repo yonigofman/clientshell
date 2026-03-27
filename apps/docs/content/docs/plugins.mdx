@@ -1,0 +1,49 @@
+---
+title: Plugins (Zod)
+description: Zod validation adapter for your schemas.
+---
+
+## Installation
+
+```bash
+pnpm add @clientshell/zod zod
+```
+
+## Basic Usage
+
+Rather than importing `@clientshell/core` DSL primitives, you can introspect existing Zod schemas natively. This keeps your runtime frontend types identical, and uses Zod's world-class static type inferencing!
+
+## Example
+
+```ts
+import { z } from "zod";
+import { defineZodSchema } from "@clientshell/zod";
+
+// Create a normal Zod object
+export const schema = z.object({
+  API_URL: z.string().url().describe("The public backend URL"),
+  FEATURES_ENABLED: z.boolean().default(false),
+});
+
+// Convert into a Clientshell SchemaShape!
+export const clientEnvSchema = defineZodSchema(schema);
+
+// ---
+
+// Read at runtime!
+import { readEnvFromShape } from "@clientshell/core";
+const env = readEnvFromShape(clientEnvSchema);
+
+console.log(env.API_URL); // Typed safely
+```
+
+## Supported Zod Types
+
+Currently `@clientshell/zod` extracts and coerces:
+- `z.string()` 
+- `z.number()` 
+- `z.boolean()`
+- Default values (`z.string().default('...')`) 
+- Descriptions (added via `.describe("...")`) 
+
+Objects and deep arrays map roughly to `json` stringified primitives dynamically depending on your bundler settings.

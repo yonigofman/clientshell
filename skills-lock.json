@@ -1,6 +1,11 @@
 {
   "version": 1,
   "skills": {
+    "fumadocs-mdx-structure": {
+      "source": "theorcdev/8bitcn-ui",
+      "sourceType": "github",
+      "computedHash": "b390c16c1316f3f97a94155c8b9c4fb81ef62026978d6d45f806642edcd6f212"
+    },
     "golang-pro": {
       "source": "jeffallan/claude-skills",
       "sourceType": "github",

@@ -1,0 +1,84 @@
+---
+title: clientshell
+description: Inject public runtime config into compiled frontend apps at container startup—no rebuilding for each environment.
+---
+
+`clientshell` provides a typed browser API for configuration and an ultra-fast Go injector that bridges the gap between static builds (Vite, Webpack) and dynamic environment variables.
+
+## The Problem
+
+Modern frontend tools pre-compile environment variables into the binary build (e.g. `VITE_API_URL` is replaced with standard strings). This forces a complete rebuild (CI/CD) when moving your application between staging and production environments because the environment variables are baked in. 
+
+## The Solution
+
+`clientshell` fixes this without resorting to unsafe, un-typed `window` polling. 
+
+It accomplishes this via:
+
+1. **Defining a schema** in TypeScript (via `@clientshell/core` or `@clientshell/zod`).
+2. **Generating a manifest** during the build phase (integrates natively with Vite, Webpack, and Rollup).
+3. **Injecting variables** at runtime using an ultra-fast Go binary (`/env-config.js`).
+4. **Providing a typed API** in the browser that allows safe read-modes with zero extra dependencies in your final production bundle.
+
+## Quick Start
+
+### 1. Install Dependencies
+
+You'll need the core library and the plugin for your specific bundler. For Vite:
+
+```bash
+pnpm add @clientshell/core
+pnpm add -D @clientshell/vite
+```
+
+### 2. Define your schema
+
+Create an `env.schema.ts` file in your source code.
+
+```ts
+import { defineSchema, string, boolean } from "@clientshell/core";
+
+export const clientEnvSchema = defineSchema({
+  API_URL: string({ required: true }),
+  ENABLE_BETA: boolean({ defaultValue: false }),
+});
+```
+
+### 3. Configure your bundler
+
+Add the plugin to your bundler configuration. 
+
+```ts
+// vite.config.ts
+import { defineConfig } from 'vite';
+import { clientshellPlugin } from "@clientshell/vite";
+import { clientEnvSchema } from "./src/env.schema";
+
+export default defineConfig({
+  plugins: [
+    clientshellPlugin({ schema: clientEnvSchema })
+  ]
+});
+```
+
+### 4. Read at runtime
+
+Read your environment variables in your frontend code safely.
+
+```ts
+import { readEnvFromShape } from "@clientshell/core";
+import { clientEnvSchema } from "./env.schema";
+
+const env = readEnvFromShape(clientEnvSchema);
+
+// Typed as a string!
+console.log(env.API_URL); 
+```
+
+## Next Steps
+
+<Cards>
+  <Card title="Core Concepts" href="/docs/core-concepts" />
+  <Card title="Vite Setup" href="/docs/bundlers/vite" />
+  <Card title="Docker Deployment" href="/docs/docker" />
+</Cards>

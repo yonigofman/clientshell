@@ -1,0 +1,48 @@
+---
+title: Vite Plugin
+description: Using Clientshell with Vite.
+---
+
+## Installation
+
+```bash
+pnpm add -D @clientshell/vite
+```
+
+## Basic Setup
+
+Vite natively imports `.ts` schema files, making it the easiest bundler to use out of the box.
+
+```ts
+// vite.config.ts
+import { defineConfig } from "vite";
+import { clientshellPlugin } from "@clientshell/vite";
+import { clientEnvSchema } from "./src/env.schema";
+
+export default defineConfig({
+  plugins: [
+    clientshellPlugin({
+      schema: clientEnvSchema,
+      prefix: "CLIENT_", // optional prefix
+    })
+  ]
+});
+```
+
+## Default Development Values
+
+Any values specified as `defaultValue` in your schema are automatically injected. But you can also set an explicit `devValues` object to overwrite runtime values **just for the local development server** without committing them to git.
+
+```ts
+// vite.config.ts
+export default defineConfig({
+  plugins: [
+    clientshellPlugin({
+      schema: clientEnvSchema,
+      devValues: {
+        API_URL: "http://localhost:3000"
+      }
+    })
+  ]
+});
+```

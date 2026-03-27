@@ -1,0 +1,62 @@
+---
+title: Core Concepts
+description: How Clientshell works under the hood
+---
+
+## 1. Schema Definition
+
+At the center of Clientshell is your schema. This schema ensures that the environment variables exposed to your browser are validated and typed accurately.
+
+```ts
+import { defineSchema, string, boolean, number } from "@clientshell/core";
+
+export const clientEnvSchema = defineSchema({
+  API_URL: string({ required: true, description: "Public API base URL" }),
+  APP_ENV: string({ defaultValue: "development" }),
+  POLL_INTERVAL_MS: number({ defaultValue: 5000 }),
+});
+```
+
+*(You can also use [Zod](/docs/plugins) if you prefer Zod's API).*
+
+## 2. Manifest Generation
+
+To allow a fast, compiled Go injector to read TypeScript abstractions, the bundler plugins (Vite, Webpack, Rollup) output a `clientshell.manifest.json` file.
+
+This manifest acts as the **source of truth contract** deployed alongside your frontend assets.
+
+```json
+{
+  "prefix": "",
+  "windowObject": "__CLIENT_CONFIG__",
+  "fields": {
+    "API_URL": {
+      "kind": "string",
+      "required": true
+    },
+    "APP_ENV": {
+      "kind": "string",
+      "defaultValue": "development"
+    }
+  }
+}
+```
+
+## 3. Go Runtime Injector
+
+Inside the `clientshell` Docker container, an ultra-fast Go binary runs as the `/env-config.js` endpoint. 
+
+When your browser requests this file, the Go binary reads the `manifest.json`, pulls the live environment variables out of the container OS, performs coercion (like converting `"5000"` into a number), and securely returns an `Object.freeze` Javascript payload.
+
+```js
+// Response from Go Injector
+window.__CLIENT_CONFIG__ = Object.freeze({
+  "API_URL": "http://api.production.internal",
+  "APP_ENV": "production",
+  "POLL_INTERVAL_MS": 5000
+});
+```
+
+## 4. Local Development Stubs
+
+You don't need Go installed locally! During development, bundler plugins (like `@clientshell/vite`) intercept requests to `/env-config.js` and serve a stubbed mock directly from your TypeScript schema default values or configured `devValues`.
