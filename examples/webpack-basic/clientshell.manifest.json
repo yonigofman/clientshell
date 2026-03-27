@@ -1,0 +1,27 @@
+{
+  "version": 1,
+  "prefix": "",
+  "windowObject": "__CLIENT_CONFIG__",
+  "fields": {
+    "API_URL": {
+      "kind": "string",
+      "required": true,
+      "description": "Public API base URL"
+    },
+    "APP_ENV": {
+      "kind": "string",
+      "required": false,
+      "defaultValue": "development"
+    },
+    "ENABLE_NEW_UI": {
+      "kind": "boolean",
+      "required": false,
+      "defaultValue": false
+    },
+    "POLL_INTERVAL_MS": {
+      "kind": "number",
+      "required": false,
+      "defaultValue": 5000
+    }
+  }
+}

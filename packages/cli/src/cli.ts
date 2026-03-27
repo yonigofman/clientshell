@@ -75,6 +75,7 @@ async function runManifest(args: string[]): Promise<void> {
   s.start("Loading schema module");
 
   // Dynamically import the schema module
+  // When loading .ts files, the caller should use: node --import tsx
   const absPath = resolve(process.cwd(), schemaPath);
   let mod: Record<string, unknown>;
   try {
@@ -295,3 +296,4 @@ function getFlag(args: string[], flag: string): string | undefined {
   if (idx === -1 || idx + 1 >= args.length) return undefined;
   return args[idx + 1];
 }
+

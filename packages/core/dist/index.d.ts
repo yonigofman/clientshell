@@ -75,6 +75,13 @@ declare function defineSchema<S extends SchemaShape>(shape: S): S;
  * definition and the Go runtime injector.
  */
 declare function createManifest(schema: SchemaShape, options?: ManifestOptions): Manifest;
+/**
+ * Builds a `window.__CLIENT_CONFIG__` stub JS string.
+ *
+ * Used by bundler plugins (Vite, Rollup, Webpack) to serve
+ * a dev-mode env-config.js with default/dev values.
+ */
+declare function buildStubContent(schema: SchemaShape, windowObject: string, devValues?: Record<string, unknown>): string;
 
 /**
  * Reads runtime config from `window.__CLIENT_CONFIG__` and coerces
@@ -85,4 +92,4 @@ declare function createManifest(schema: SchemaShape, options?: ManifestOptions):
  */
 declare function readEnvFromShape<S extends SchemaShape>(schema: S): InferConfig<S>;
 
-export { type FieldDescriptor, type FieldKind, type InferConfig, type Manifest, type ManifestField, type ManifestOptions, type SchemaShape, boolean, createManifest, defineSchema, json, number, readEnvFromShape, string };
+export { type FieldDescriptor, type FieldKind, type InferConfig, type Manifest, type ManifestField, type ManifestOptions, type SchemaShape, boolean, buildStubContent, createManifest, defineSchema, json, number, readEnvFromShape, string };

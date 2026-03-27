@@ -1,6 +1,6 @@
 import type { Plugin } from "vite";
 import type { SchemaShape, ManifestOptions } from "@clientshell/core";
-import { createManifest } from "@clientshell/core";
+import { createManifest, buildStubContent } from "@clientshell/core";
 import { writeFile, mkdir } from "node:fs/promises";
 import { join } from "node:path";
 
@@ -27,8 +27,6 @@ export function clientshellPlugin(options: ClientshellPluginOptions): Plugin {
   } = options;
 
   const manifest = createManifest(schema, { prefix, windowObject });
-
-  // Build the dev stub content
   const stubContent = buildStubContent(schema, windowObject, devValues);
 
   return {
@@ -58,25 +56,4 @@ export function clientshellPlugin(options: ClientshellPluginOptions): Plugin {
       );
     },
   };
-}
-
-/**
- * Builds a `window.__CLIENT_CONFIG__` stub JS string for dev mode.
- */
-function buildStubContent(
-  schema: SchemaShape,
-  windowObject: string,
-  devValues: Record<string, unknown>,
-): string {
-  const values: Record<string, unknown> = {};
-
-  for (const [name, descriptor] of Object.entries(schema)) {
-    if (name in devValues) {
-      values[name] = devValues[name];
-    } else if (descriptor.defaultValue !== undefined) {
-      values[name] = descriptor.defaultValue;
-    }
-  }
-
-  return `window.${windowObject} = ${JSON.stringify(values, null, 2)};\n`;
 }

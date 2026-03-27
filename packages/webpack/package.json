@@ -1,8 +1,8 @@
 {
-  "name": "@clientshell/core",
+  "name": "@clientshell/webpack",
   "version": "0.1.0",
   "type": "module",
-  "description": "Typed public runtime config for frontend apps — core package",
+  "description": "Webpack plugin for clientshell — automatic manifest output and dev stub",
   "license": "MIT",
   "exports": {
     ".": {
@@ -16,12 +16,18 @@
   "files": ["dist"],
   "scripts": {
     "build": "tsup",
-    "test": "vitest run",
     "dev": "tsup --watch"
   },
+  "dependencies": {
+    "@clientshell/core": "workspace:*"
+  },
+  "peerDependencies": {
+    "webpack": "^5.0.0"
+  },
   "devDependencies": {
+    "@types/node": "^22.0.0",
     "typescript": "catalog:",
     "tsup": "catalog:",
-    "vitest": "catalog:"
+    "webpack": "^5.0.0"
   }
 }

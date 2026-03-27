@@ -1,0 +1,20 @@
+{
+  "name": "example-rollup-basic",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "manifest": "node --import tsx ../../packages/cli/bin/clientshell.js manifest --schema src/env.schema.ts --output clientshell.manifest.json",
+    "build": "pnpm manifest && rollup -c rollup.config.mjs",
+    "stub": "node ../../packages/cli/bin/clientshell.js stub --manifest clientshell.manifest.json --output public/env-config.js"
+  },
+  "devDependencies": {
+    "@clientshell/core": "workspace:*",
+    "@clientshell/rollup": "workspace:*",
+    "@rollup/plugin-node-resolve": "^16.0.0",
+    "@rollup/plugin-typescript": "^12.0.0",
+    "rollup": "^4.0.0",
+    "tsx": "^4.0.0",
+    "typescript": "catalog:",
+    "tslib": "^2.6.0"
+  }
+}

@@ -38,3 +38,27 @@ export function createManifest(
     fields,
   };
 }
+
+/**
+ * Builds a `window.__CLIENT_CONFIG__` stub JS string.
+ *
+ * Used by bundler plugins (Vite, Rollup, Webpack) to serve
+ * a dev-mode env-config.js with default/dev values.
+ */
+export function buildStubContent(
+  schema: SchemaShape,
+  windowObject: string,
+  devValues: Record<string, unknown> = {},
+): string {
+  const values: Record<string, unknown> = {};
+
+  for (const [name, descriptor] of Object.entries(schema)) {
+    if (name in devValues) {
+      values[name] = devValues[name];
+    } else if (descriptor.defaultValue !== undefined) {
+      values[name] = descriptor.defaultValue;
+    }
+  }
+
+  return `window.${windowObject} = ${JSON.stringify(values, null, 2)};\n`;
+}

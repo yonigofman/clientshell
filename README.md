@@ -36,7 +36,11 @@ export const clientEnvSchema = defineSchema({
 });
 ```
 
-### 2. Configure Vite
+### 2. Configure your bundler
+
+**A. Vite (`@clientshell/vite`)**
+
+Vite natively imports `.ts` schema files:
 
 ```ts
 import { clientshellPlugin } from "@clientshell/vite";
@@ -46,6 +50,26 @@ export default {
   plugins: [clientshellPlugin({ schema: clientEnvSchema })]
 };
 ```
+
+**B. Webpack (`@clientshell/webpack`) & Rollup (`@clientshell/rollup`)**
+
+Because Webpack and Rollup config files run in plain Node.js and can't natively `require` `.ts` files, you point the plugin to a pre-generated manifest JSON file instead:
+
+```js
+// webpack.config.cjs
+const { ClientshellWebpackPlugin } = require("@clientshell/webpack");
+
+module.exports = {
+  plugins: [
+    new ClientshellWebpackPlugin({
+      manifestPath: "./clientshell.manifest.json",
+      devValues: { API_URL: "http://localhost:3000" }
+    })
+  ]
+};
+```
+
+*(You generate `clientshell.manifest.json` using the [CLI](./packages/cli) before running the bundler).*
 
 ### 3. Read at runtime
 
@@ -59,7 +83,7 @@ console.log(env.API_URL); // Fully typed string
 
 ## Local Development
 
-For development, the Vite plugin automatically serves a stub `/env-config.js` to the browser, so your code works exactly the same way it does in production.
+For development, the bundler plugins (Vite, Webpack) automatically serve or generate a stub `env-config.js` to the browser, so your code works exactly the same way it does in production.
 
 ```bash
 pnpm install

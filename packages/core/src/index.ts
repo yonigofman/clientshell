@@ -13,7 +13,7 @@ export type {
 export { defineSchema, string, boolean, number, json } from "./schema.js";
 
 // Manifest generation
-export { createManifest } from "./manifest.js";
+export { createManifest, buildStubContent } from "./manifest.js";
 
 // Runtime reader
 export { readEnvFromShape } from "./runtime.js";

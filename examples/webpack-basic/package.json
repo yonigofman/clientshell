@@ -1,0 +1,20 @@
+{
+  "name": "example-webpack-basic",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "manifest": "node --import tsx ../../packages/cli/bin/clientshell.js manifest --schema src/env.schema.ts --output clientshell.manifest.json",
+    "build": "pnpm manifest && webpack --config webpack.config.cjs",
+    "stub": "node ../../packages/cli/bin/clientshell.js stub --manifest clientshell.manifest.json --output dist/env-config.js"
+  },
+  "devDependencies": {
+    "@clientshell/core": "workspace:*",
+    "@clientshell/webpack": "workspace:*",
+    "html-webpack-plugin": "^5.6.0",
+    "ts-loader": "^9.5.0",
+    "tsx": "^4.0.0",
+    "webpack": "^5.0.0",
+    "webpack-cli": "^6.0.0",
+    "typescript": "catalog:"
+  }
+}

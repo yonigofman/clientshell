@@ -39,6 +39,18 @@ function createManifest(schema, options = {}) {
     fields
   };
 }
+function buildStubContent(schema, windowObject, devValues = {}) {
+  const values = {};
+  for (const [name, descriptor] of Object.entries(schema)) {
+    if (name in devValues) {
+      values[name] = devValues[name];
+    } else if (descriptor.defaultValue !== void 0) {
+      values[name] = descriptor.defaultValue;
+    }
+  }
+  return `window.${windowObject} = ${JSON.stringify(values, null, 2)};
+`;
+}
 
 // src/runtime.ts
 function readEnvFromShape(schema) {
@@ -115,6 +127,7 @@ function getKindDefault(kind) {
 }
 export {
   boolean,
+  buildStubContent,
   createManifest,
   defineSchema,
   json,

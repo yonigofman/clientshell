@@ -1,27 +1,32 @@
 {
-  "name": "@clientshell/core",
+  "name": "@clientshell/rollup",
   "version": "0.1.0",
   "type": "module",
-  "description": "Typed public runtime config for frontend apps — core package",
+  "description": "Rollup plugin for clientshell — automatic manifest output on build",
   "license": "MIT",
   "exports": {
     ".": {
       "import": "./dist/index.js",
-      "require": "./dist/index.cjs",
       "types": "./dist/index.d.ts"
     }
   },
-  "main": "./dist/index.cjs",
+  "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "files": ["dist"],
   "scripts": {
     "build": "tsup",
-    "test": "vitest run",
     "dev": "tsup --watch"
   },
+  "dependencies": {
+    "@clientshell/core": "workspace:*"
+  },
+  "peerDependencies": {
+    "rollup": "^3.0.0 || ^4.0.0"
+  },
   "devDependencies": {
+    "@types/node": "^22.0.0",
     "typescript": "catalog:",
     "tsup": "catalog:",
-    "vitest": "catalog:"
+    "rollup": "^4.0.0"
   }
 }
