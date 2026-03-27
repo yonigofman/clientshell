@@ -7,6 +7,13 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 [![pnpm](https://img.shields.io/badge/pnpm-v10-blue)](https://pnpm.io/)
 [![Docs](https://img.shields.io/badge/docs-fumadocs-indigo)](https://yonigofman.github.io/clientshell/)
+[![npm core](https://img.shields.io/npm/v/%40clientshell%2Fcore?label=core)](https://www.npmjs.com/package/@clientshell/core)
+[![npm cli](https://img.shields.io/npm/v/%40clientshell%2Fcli?label=cli)](https://www.npmjs.com/package/@clientshell/cli)
+[![npm vite](https://img.shields.io/npm/v/%40clientshell%2Fvite?label=vite)](https://www.npmjs.com/package/@clientshell/vite)
+[![npm webpack](https://img.shields.io/npm/v/%40clientshell%2Fwebpack?label=webpack)](https://www.npmjs.com/package/@clientshell/webpack)
+[![npm rollup](https://img.shields.io/npm/v/%40clientshell%2Frollup?label=rollup)](https://www.npmjs.com/package/@clientshell/rollup)
+[![npm zod](https://img.shields.io/npm/v/%40clientshell%2Fzod?label=zod)](https://www.npmjs.com/package/@clientshell/zod)
+[![npx cli](https://img.shields.io/badge/npx-%40clientshell%2Fcli-CB3837?logo=npm)](https://www.npmjs.com/package/@clientshell/cli)
 
 Inject public runtime config into compiled frontend apps at container startup—no rebuilding for each environment.
 
