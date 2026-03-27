@@ -69,12 +69,30 @@ pnpm dev --filter example-vite-basic
 
 ## Production & Docker
 
-For production, build your app then use the `clientshell` Docker image:
+To use `clientshell` in production, you can use the `clientshell` image as a base for your own application in a multi-stage Dockerfile.
+
+### Custom Dockerfile Example
+
+```dockerfile
+# 1. Build your app
+FROM node:20-alpine AS builder
+WORKDIR /app
+COPY . .
+RUN pnpm install && pnpm build
+
+# 2. Use clientshell as the runtime
+FROM clientshell
+COPY --from=builder /app/dist /app/dist
+```
+
+Build and run with environment variables:
 
 ```bash
-docker build -t my-app -f docker/Dockerfile .
-docker run -e CLIENT_API_URL=https://prod.api.com my-app
+docker build -t my-app .
+docker run -p 8080:8080 -e CLIENT_API_URL=https://api.example.com my-app
 ```
+
+The `clientshell` image handles reading the manifest, injecting variables into `env-config.js`, and serving your SPA via Caddy.
 
 ---
 
